@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro Rápido</title>
+    <style>
+        :root {
+            --bg: #f4f7f6;
+            --primary: #2ecc71;
+            --text: #2c3e50;
+            --card: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .widget-container {
+            background: var(--card);
+            width: 90%;
+            max-width: 350px;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* Selector de Categoría */
+        .category-select {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            background: #fff url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%232c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 15px center;
+            background-size: 20px;
+            appearance: none;
+        }
+
+        /* Contenedor de Ruedas (Spinners) */
+        .spinners-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            height: 180px;
+            position: relative;
+        }
+
+        /* Efecto de degradado para los spinners */
+        .spinners-group::before, .spinners-group::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0;
+            height: 60px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .spinners-group::before { top: 0; background: linear-gradient(to bottom, var(--card), rgba(255,255,255,0)); }
+        .spinners-group::after { bottom: 0; background: linear-gradient(to top, var(--card), rgba(255,255,255,0)); }
+
+        .spinner {
+            flex: 1;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            height: 100%;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .spinner::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .spinner-item {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #bdc3c7;
+            scroll-snap-align: center;
+            transition: color 0.3s;
+        }
+
+        /* Resaltar el número central */
+        .spinner-item.active {
+            color: var(--text);
+            font-size: 32px;
+        }
+
+        /* Botón de Registro (+) */
+        .add-btn {
+            width: 70px;
+            height: 70px;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .add-btn:active { transform: scale(0.9); }
+
+    </style>
+</head>
+<body>
+
+<div class="widget-container">
+    <select class="category-select">
+        <option>Seleccionar categoría</option>
+        <option>🍔 Comida</option>
+        <option>🚗 Transporte</option>
+        <option>🛒 Súper</option>
+        <option>🏠 Hogar</option>
+    </select>
+
+    <div class="spinners-group">
+        <div class="spinner" id="miles">
+            <div class="spinner-item"></div> <div class="spinner-item" data-val="0">0k</div>
+            <div class="spinner-item" data-val="1">1k</div>
+            <div class="spinner-item" data-val="2">2k</div>
+            <div class="spinner-item" data-val="3">3k</div>
+            <div class="spinner-item" data-val="4">4k</div>
+            <div class="spinner-item" data-val="5">5k</div>
+            <div class="spinner-item"></div> </div>
+
+        <div class="spinner" id="units">
+            <div class="spinner-item"></div>
+            <div class="spinner-item" data-val="0">000</div>
+            <div class="spinner-item" data-val="100">100</div>
+            <div class="spinner-item" data-val="200">200</div>
+            <div class="spinner-item" data-val="300">300</div>
+            <div class="spinner-item" data-val="400">400</div>
+            <div class="spinner-item" data-val="500">500</div>
+            <div class="spinner-item"></div>
+        </div>
+    </div>
+
+    <button class="add-btn" onclick="registrarGasto()">+</button>
+</div>
+
+<script>
+    // Función para manejar el resaltado visual
+    const spinners = document.querySelectorAll('.spinner');
+    
+    spinners.forEach(spinner => {
+        spinner.addEventListener('scroll', () => {
+            const items = spinner.querySelectorAll('.spinner-item');
+            const center = spinner.scrollTop + 90; // Centro del contenedor
+            
+            items.forEach(item => {
+                const itemTop = item.offsetTop;
+                if (center > itemTop && center < itemTop + 60) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    function registrarGasto() {
+        const miles = document.querySelector('#miles .active')?.dataset.val || 0;
+        const units = document.querySelector('#units .active')?.dataset.val || 0;
+        const total = (parseInt(miles) * 1000) + parseInt(units);
+        
+        if (total > 0) {
+            alert(`¡Gasto registrado: $${total}!`);
+            // Aquí conectarías con tu base de datos
+        } else {
+            alert("Selecciona un monto");
+        }
+    }
+</script>
+
+</body>
+  </html>
+  
