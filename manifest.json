@@ -1,8 +1,8 @@
 {
-  "id": "/gastos-flash/",
-  "name": "Gastos Flash Pro",
+  "id": "/Calculadoragil/",
+  "name": "Calculadora Ágil Pro",
   "short_name": "Gastos",
-  "start_url": "./index.html",
+  "start_url": "/Calculadoragil/index.html",
   "display": "standalone",
   "background_color": "#f0f2f5",
   "theme_color": "#2ecc71",
@@ -20,7 +20,7 @@
       "name": "Nuevo Gasto",
       "short_name": "Añadir",
       "description": "Abrir registro rápido",
-      "url": "./index.html?action=new",
+      "url": "/Calculadoragil/index.html?action=new",
       "icons": [
         {
           "src": "https://cdn-icons-png.flaticon.com/512/1828/1828817.png",
