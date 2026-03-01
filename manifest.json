@@ -1,24 +1,32 @@
 {
+  "id": "/gastos-flash/",
   "name": "Gastos Flash Pro",
   "short_name": "Gastos",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f0f2f5",
   "theme_color": "#2ecc71",
+  "description": "Registro rápido de gastos a una sola mano",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/2454/2454282.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
       "name": "Nuevo Gasto",
       "short_name": "Añadir",
-      "description": "Abrir registro rápido de gastos",
+      "description": "Abrir registro rápido",
       "url": "./index.html?action=new",
-      "icons": [{ "src": "https://cdn-icons-png.flaticon.com/512/1828/1828817.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "https://cdn-icons-png.flaticon.com/512/1828/1828817.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
