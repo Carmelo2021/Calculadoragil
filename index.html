@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Registro Rápido</title>
+    <title>Gastos Flash</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2ecc71">
+    
     <style>
         :root {
-            --bg: #f4f7f6;
+            --bg: #f0f2f5;
             --primary: #2ecc71;
-            --text: #2c3e50;
+            --text: #1a1a1a;
             --card: #ffffff;
+            --gray: #95a5a6;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, system-ui, sans-serif;
             background-color: var(--bg);
             margin: 0;
             display: flex;
@@ -21,174 +25,143 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            user-select: none;
+            touch-action: manipulation;
         }
 
-        .widget-container {
+        .widget-card {
             background: var(--card);
             width: 90%;
-            max-width: 350px;
-            padding: 20px;
-            border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
+            max-width: 360px;
+            padding: 25px;
+            border-radius: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        /* Selector de Categoría */
-        .category-select {
+        .select-wrapper {
+            margin-bottom: 25px;
+        }
+
+        select {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             font-size: 18px;
-            border: 2px solid #eee;
+            border: 2px solid #edf2f7;
             border-radius: 15px;
-            margin-bottom: 30px;
-            background: #fff url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%232c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 15px center;
-            background-size: 20px;
+            background: #f8fafc;
+            color: var(--text);
             appearance: none;
         }
 
-        /* Contenedor de Ruedas (Spinners) */
-        .spinners-group {
+        .spinners-container {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            height: 180px;
+            gap: 12px;
+            height: 200px;
+            margin-bottom: 25px;
             position: relative;
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
         }
-
-        /* Efecto de degradado para los spinners */
-        .spinners-group::before, .spinners-group::after {
-            content: "";
-            position: absolute;
-            left: 0; right: 0;
-            height: 60px;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .spinners-group::before { top: 0; background: linear-gradient(to bottom, var(--card), rgba(255,255,255,0)); }
-        .spinners-group::after { bottom: 0; background: linear-gradient(to top, var(--card), rgba(255,255,255,0)); }
 
         .spinner {
             flex: 1;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
-            height: 100%;
-            border: 1px solid #eee;
-            border-radius: 15px;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
-        .spinner::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        .spinner::-webkit-scrollbar { display: none; }
 
-        .spinner-item {
-            height: 60px;
+        .item {
+            height: 66px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #bdc3c7;
+            font-size: 22px;
+            color: var(--gray);
             scroll-snap-align: center;
-            transition: color 0.3s;
+            transition: all 0.2s;
         }
 
-        /* Resaltar el número central */
-        .spinner-item.active {
-            color: var(--text);
+        .item.active {
+            color: var(--primary);
             font-size: 32px;
+            font-weight: bold;
         }
 
-        /* Botón de Registro (+) */
-        .add-btn {
-            width: 70px;
-            height: 70px;
-            background-color: var(--primary);
+        .btn-save {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
             border: none;
             border-radius: 50%;
             color: white;
-            font-size: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-size: 45px;
+            display: block;
             margin: 0 auto;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
             cursor: pointer;
-            transition: transform 0.1s;
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
         }
-        .add-btn:active { transform: scale(0.9); }
-
+        .btn-save:active { transform: scale(0.92); }
     </style>
 </head>
 <body>
 
-<div class="widget-container">
-    <select class="category-select">
-        <option>Seleccionar categoría</option>
-        <option>🍔 Comida</option>
-        <option>🚗 Transporte</option>
-        <option>🛒 Súper</option>
-        <option>🏠 Hogar</option>
-    </select>
-
-    <div class="spinners-group">
-        <div class="spinner" id="miles">
-            <div class="spinner-item"></div> <div class="spinner-item" data-val="0">0k</div>
-            <div class="spinner-item" data-val="1">1k</div>
-            <div class="spinner-item" data-val="2">2k</div>
-            <div class="spinner-item" data-val="3">3k</div>
-            <div class="spinner-item" data-val="4">4k</div>
-            <div class="spinner-item" data-val="5">5k</div>
-            <div class="spinner-item"></div> </div>
-
-        <div class="spinner" id="units">
-            <div class="spinner-item"></div>
-            <div class="spinner-item" data-val="0">000</div>
-            <div class="spinner-item" data-val="100">100</div>
-            <div class="spinner-item" data-val="200">200</div>
-            <div class="spinner-item" data-val="300">300</div>
-            <div class="spinner-item" data-val="400">400</div>
-            <div class="spinner-item" data-val="500">500</div>
-            <div class="spinner-item"></div>
-        </div>
+<div class="widget-card">
+    <div class="select-wrapper">
+        <select id="cat">
+            <option value="Comida">🍔 Comida y Bebida</option>
+            <option value="Transporte">🚗 Transporte / Uber</option>
+            <option value="Super">🛒 Supermercado</option>
+            <option value="Vivienda">🏠 Alquiler / Hogar</option>
+            <option value="Entretenimiento">🎬 Ocio y Cine</option>
+            <option value="Salud">💊 Salud y Farmacia</option>
+            <option value="Servicios">💡 Luz / Agua / Internet</option>
+            <option value="Suscripciones">📱 Netflix / Spotify</option>
+            <option value="Regalos">🎁 Regalos / Otros</option>
+            <option value="Ahorro">💰 Inversión / Ahorro</option>
+        </select>
     </div>
 
-    <button class="add-btn" onclick="registrarGasto()">+</button>
+    <div class="spinners-container">
+        <div class="spinner" id="sp-miles"></div>
+        <div class="spinner" id="sp-units"></div>
+    </div>
+
+    <button class="btn-save" onclick="save()">+</button>
 </div>
 
 <script>
-    // Función para manejar el resaltado visual
-    const spinners = document.querySelectorAll('.spinner');
-    
-    spinners.forEach(spinner => {
-        spinner.addEventListener('scroll', () => {
-            const items = spinner.querySelectorAll('.spinner-item');
-            const center = spinner.scrollTop + 90; // Centro del contenedor
-            
-            items.forEach(item => {
-                const itemTop = item.offsetTop;
-                if (center > itemTop && center < itemTop + 60) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-        });
-    });
-
-    function registrarGasto() {
-        const miles = document.querySelector('#miles .active')?.dataset.val || 0;
-        const units = document.querySelector('#units .active')?.dataset.val || 0;
-        const total = (parseInt(miles) * 1000) + parseInt(units);
-        
-        if (total > 0) {
-            alert(`¡Gasto registrado: $${total}!`);
-            // Aquí conectarías con tu base de datos
-        } else {
-            alert("Selecciona un monto");
+    const setupSpinner = (id, max, step, suffix = "") => {
+        const el = document.getElementById(id);
+        el.innerHTML = '<div class="item"></div>'; // Spacer
+        for(let i=0; i<=max; i+=step) {
+            const val = i === 0 && suffix === "00" ? "000" : i + suffix;
+            el.innerHTML += `<div class="item" data-val="${i}">${val}</div>`;
         }
+        el.innerHTML += '<div class="item"></div>'; // Spacer
+
+        el.onscroll = () => {
+            const items = el.querySelectorAll('.item');
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                const mid = window.innerHeight / 2; // Simplificado para el centro
+                const boxMid = el.getBoundingClientRect().top + 100;
+                if(Math.abs(rect.top + 33 - boxMid) < 30) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+        };
+    };
+
+    setupSpinner('sp-miles', 50, 1, "k");
+    setupSpinner('sp-units', 900, 100);
+
+    function save() {
+        const m = document.querySelector('#sp-miles .active')?.dataset.val || 0;
+        const u = document.querySelector('#sp-units .active')?.dataset.val || 0;
+        const total = (m * 1000) + parseInt(u);
+        const cat = document.getElementById('cat').value;
+        if(total > 0) alert(`Registrado en ${cat}: $${total.toLocaleString()}`);
     }
 </script>
-
 </body>
-  </html>
-  
+</html>
+
